@@ -5,22 +5,6 @@
 
 # Table of contents
 
-- [예제 - 백신예약](#---)
-  - [서비스 시나리오](#서비스-시나리오)
-  - [체크포인트](#체크포인트)
-  - [구현:](#구현-)
-    - [DDD 의 적용](#ddd-의-적용)
-    - [폴리글랏 퍼시스턴스](#폴리글랏-퍼시스턴스)
-    - [폴리글랏 프로그래밍](#폴리글랏-프로그래밍)
-    - [동기식 호출 과 Fallback 처리](#동기식-호출-과-Fallback-처리)
-    - [비동기식 호출 과 Eventual Consistency](#비동기식-호출-과-Eventual-Consistency)
-  - [운영](#운영)
-    - [CI/CD 설정](#cicd설정)
-    - [동기식 호출 / 서킷 브레이킹 / 장애격리](#동기식-호출-서킷-브레이킹-장애격리)
-    - [오토스케일 아웃](#오토스케일-아웃)
-    - [무정지 재배포](#무정지-재배포)
-  - [신규 개발 조직의 추가](#신규-개발-조직의-추가)
-
 # 서비스 시나리오 
 
 백신 예약
@@ -48,13 +32,108 @@
 
 ### 1.Sasg
 
-![image](https://user-images.githubusercontent.com/86760552/132289793-57e8f5a5-2177-48bb-bf7a-f08fa3f165ca.png)
+![image](https://user-images.githubusercontent.com/86760552/132290658-ae4ccd78-d94d-4c3e-a408-437215376d6f.png)
 
 ### 2. CQRS 
 
 - Table 구조
 ![image](https://user-images.githubusercontent.com/86760552/132290110-0e3753eb-06c0-4382-8eaa-ae94827f72c0.png)
 
+- viewpage MSA ViewHandler 를 통해 구현
+```
+@Service
+public class MyPageViewHandler {
+
+
+    @Autowired
+    private MyPageRepository myPageRepository;
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenVaccineReserved_then_CREATE_1 (@Payload VaccineReserved vaccineReserved) {
+        try {
+
+            if (!vaccineReserved.validate()) return;
+
+            // view 객체 생성
+            MyPage myPage = new MyPage();
+            // view 객체에 이벤트의 Value 를 set 함
+            // myPage.setId(vaccineReserved.getId());
+            myPage.setUserId(vaccineReserved.getUserId());
+            myPage.setHospital(vaccineReserved.getHospital());
+            myPage.setReservedDate(vaccineReserved.getReservedDate());
+            myPage.setReservationStatus(vaccineReserved.getReservationStatus());
+            myPage.setUserId(vaccineReserved.getUserId());
+            myPage.setHospital(vaccineReserved.getHospital());
+            myPage.setReservedDate(vaccineReserved.getReservedDate());
+            myPage.setReservationStatus(vaccineReserved.getReservationStatus());
+            // view 레파지 토리에 save
+            myPageRepository.save(myPage);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenVaccineReserved_then_UPDATE_1(@Payload VaccineReserved vaccineReserved) {
+        try {
+            if (!vaccineReserved.validate()) return;
+                // view 객체 조회
+
+                    List<MyPage> myPageList = myPageRepository.findByUserId(vaccineReserved.getUserId());
+                    for(MyPage myPage : myPageList){
+                    // view 객체에 이벤트의 eventDirectValue 를 set 함
+                    myPage.setReservationStatus(vaccineReserved.getReservationStatus());
+                // view 레파지 토리에 save
+                myPageRepository.save(myPage);
+                }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenReservationCancelled_then_UPDATE_2(@Payload ReservationCancelled reservationCancelled) {
+        try {
+            if (!reservationCancelled.validate()) return;
+                // view 객체 조회
+
+                    List<MyPage> myPageList = myPageRepository.findByUserId(reservationCancelled.getUserId());
+                    for(MyPage myPage : myPageList){
+                    // view 객체에 이벤트의 eventDirectValue 를 set 함
+                    myPage.setReservationStatus(reservationCancelled.getReservationStatus());
+                // view 레파지 토리에 save
+                myPageRepository.save(myPage);
+                }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @StreamListener(KafkaProcessor.INPUT)
+    public void whenReservationCancelled_then_UPDATE_3(@Payload ReservationCancelled reservationCancelled) {
+        try {
+            if (!reservationCancelled.validate()) return;
+                // view 객체 조회
+
+                    List<MyPage> myPageList = myPageRepository.findByUserId(reservationCancelled.getUserId());
+                    for(MyPage myPage : myPageList){
+                    // view 객체에 이벤트의 eventDirectValue 를 set 함
+                    myPage.setReservationStatus(reservationCancelled.getReservationStatus());
+                // view 레파지 토리에 save
+                myPageRepository.save(myPage);
+                }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+```
+- 실제로 view 페이지를 조회해 보면 모든 예약에 대한 전반적인 상태를 알수 있다.
+![5  마이페이지 조회](https://user-images.githubusercontent.com/86760552/131079768-68df7fc5-a423-42c5-a1ac-751123c72714.PNG)
+
+'''
 
 
 
