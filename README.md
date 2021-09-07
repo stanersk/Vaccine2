@@ -302,10 +302,10 @@ Gateway Loadbal 확인 == 수정 필요.
 각 구현체들은 각자의 source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 Azure를 사용하였음.
 
 - 도커 이미지
-![도커 이미지](https://user-images.githubusercontent.com/86760552/131076024-b138926d-43b3-4ffe-9cf3-61b935d3bc6e.png)
+![image](https://user-images.githubusercontent.com/86760552/132330754-ec7ca94c-e77a-4186-91c8-e962db62e74c.png)
 
-- Azure Portal
-![azure_potal](https://user-images.githubusercontent.com/86760552/131076080-9043917d-d1cc-4b8e-bdd0-a69157bf2e68.PNG)
+- azure 이미지
+![image](https://user-images.githubusercontent.com/86760552/132330848-ed0ea38a-2141-47df-a69e-912f393659ab.png)
 
 # 7. Circuit Breaker
 
