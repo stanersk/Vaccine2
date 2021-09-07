@@ -308,7 +308,7 @@ hystrix:
   command:
     # 전역설정
     default:
-      execution.isolation.thread.timeoutInMilliseconds: 610
+      execution.isolation.thread.timeoutInMilliseconds: 600
 
 ```
 
