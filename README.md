@@ -2,9 +2,6 @@
 
 # 백신 예약 시스템
 
-
-# Table of contents
-
 # 서비스 시나리오 
 
 백신 예약
@@ -38,6 +35,7 @@
 
 - Table 구조
 ![image](https://user-images.githubusercontent.com/86760552/132290110-0e3753eb-06c0-4382-8eaa-ae94827f72c0.png)
+
 
 - viewpage MSA ViewHandler 를 통해 구현
 ```
@@ -132,8 +130,6 @@ public class MyPageViewHandler {
 ```
 - 실제로 view 페이지를 조회해 보면 모든 예약에 대한 전반적인 상태를 알수 있다.
 ![5  마이페이지 조회](https://user-images.githubusercontent.com/86760552/131079768-68df7fc5-a423-42c5-a1ac-751123c72714.PNG)
-
-'''
 
 
 
