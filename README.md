@@ -136,9 +136,75 @@ Vanccine 관리 프로젝트에서는 PolicyHandler에서 처리 시 어떤 건�
 서비스간 연관된 처리를 정확하게 구현하고 있습니다.
 
 - 백신의 예약과 취소
+![image](https://user-images.githubusercontent.com/86760552/132299046-18b2cb6f-a82b-4e0e-a5ad-dd7e0f8de84c.png)
 
 
+# 4. Req / Resp
 
+분석단계에서의 조건 중 하나로 백신예약->백신관리 간의 호출은 동기식 일관성을 유지하는 트랜잭션으로 처리하기로 하였다. 호출 프로토콜은 이미 앞서 Rest Repository 에 의해 노출되어있는 REST 서비스를 FeignClient 를 이용하여 호출하도록 한다. 
+
+- 백신관리 서비스를 호출하기 위하여 Stub과 (FeignClient) 를 이용하여 Service 대행 인터페이스 (Proxy) 를 구현 
+
+```
+# VaccineMgmtService.java
+
+package vaccinereservation.external;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
+
+@FeignClient(name="vaccine", url="http://localhost:8088")
+public interface VaccineMgmtService {
+    @RequestMapping(method= RequestMethod.PUT, path="/vaccineMgmts/updateVaccine")
+    public void updateVaccine(@RequestParam("vaccineId") long vaccineId);
+
+}
+
+```
+
+- 예약을 받은 직후(@PostPersist) 백신 확보 및 예약 처리를 하도록 설계
+```
+# VaccineMgmt.java
+
+    @PostPersist
+    public void onPostPersist(){
+        VaccineRegistered vaccineRegistered = new VaccineRegistered();
+        vaccineRegistered.setId(this.getId());
+        vaccineRegistered.setUserId(this.getUserId());
+        vaccineRegistered.setHospital(this.getHospital());
+        vaccineRegistered.setAvailableDate(this.getAvailableDate());        
+        // vaccineRegistered.setQty(this.getQty());
+        vaccineRegistered.setVaccineStatus("registered");
+
+        BeanUtils.copyProperties(this, vaccineRegistered);
+        vaccineRegistered.publishAfterCommit();
+
+    }
+```
+
+- 동기식 호출에서는 호출 시간에 따른 타임 커플링이 발생하며, 백신관리 시스템이 장애가 나면 예약을 못받는다는 것을 확인:
+
+
+- 백신 서비스 다운
+![1  백신서비스다운](https://user-images.githubusercontent.com/86760552/131067753-bb9323ea-31ee-4ab7-9475-c78f994e450f.PNG)
+
+- 백신 예약 - 에러
+![2  백신예약 실패](https://user-images.githubusercontent.com/86760552/131067772-00eca8c2-1dbd-4cc6-8dd4-cf16cb60df48.PNG)
+
+- 백신 서비스 개시
+![3  백신재기동완료](https://user-images.githubusercontent.com/86760552/131067806-53bad80e-f4d9-427e-b829-7a2979f0a468.PNG)
+
+- 백신 예약 - 성공
+![4 백신예약완료](https://user-images.githubusercontent.com/86760552/131067855-6e7c34e0-e41e-4725-a9b8-6687ab33a8a4.PNG)
+
+
+- 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에서 설명한다.)
 
 
 
