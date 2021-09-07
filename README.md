@@ -2,7 +2,7 @@
 
 # 백신 예약 시스템
 
-# 서비스 시나리오 
+### 서비스 시나리오 
 
 백신 예약
 
@@ -25,13 +25,11 @@
 3. 성능
    - 예약정보를 한번에 확인할 수 있어야 한다.(CQRS)
 
-# 분석/설계 
-
-### 1.Sasg
+# 1.Sasg
 
 ![image](https://user-images.githubusercontent.com/86760552/132290658-ae4ccd78-d94d-4c3e-a408-437215376d6f.png)
 
-### 2. CQRS 
+# 2. CQRS 
 
 - Table 구조
 ![image](https://user-images.githubusercontent.com/86760552/132290110-0e3753eb-06c0-4382-8eaa-ae94827f72c0.png)
