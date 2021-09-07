@@ -274,8 +274,9 @@ public interface VaccineMgmtService {
         Service 생성
         kubectl apply -f service.yaml      
 ```
-Gateway Loadbal 확인 == 수정 필요.
-![gateway_LB](https://user-images.githubusercontent.com/86760552/131075921-affd92fb-b9e8-43ed-9530-e62c9eaba94e.jpg)
+Gateway Loadbal 확인 
+![image](https://user-images.githubusercontent.com/86760552/132352995-4138756b-5acb-4a25-a251-63582a8a991b.png)
+
 
 # 6. Deploy / Pipeline
 
