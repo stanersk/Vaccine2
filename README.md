@@ -127,7 +127,22 @@ public class MyPageViewHandler {
     }
 ```
 - 실제로 view 페이지를 조회해 보면 모든 예약에 대한 전반적인 상태를 알수 있다.
-![5  마이페이지 조회](https://user-images.githubusercontent.com/86760552/131079768-68df7fc5-a423-42c5-a1ac-751123c72714.PNG)
+![image](https://user-images.githubusercontent.com/86760552/132297054-c92b5e43-a23b-4651-8491-dc2a55195106.png)
+
+
+# 3. Correlation
+
+Vanccine 관리 프로젝트에서는 PolicyHandler에서 처리 시 어떤 건에 대한 처리인지를 구별하기 위한 Correlation-key 구현을 이벤트 클래스 안의 변수로 전달받아 
+서비스간 연관된 처리를 정확하게 구현하고 있습니다.
+
+- 백신 예약
+![2 백신예약](https://user-images.githubusercontent.com/86760552/131067002-f33d3330-d430-4e6d-b61d-9ead306f8ba2.PNG)
+
+- 백신 취소
+![3 백신취소](https://user-images.githubusercontent.com/86760552/131067043-e574c60c-6200-4c4a-b337-d2bdbc6b0884.PNG)
+
+
+
 
 
 
