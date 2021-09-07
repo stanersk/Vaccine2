@@ -202,7 +202,8 @@ public interface VaccineMgmtService {
 
 
 # 5. Gateway
-    
+
+```    
   1. gateway 스프링부트 App을 추가 후 application.yaml내에 각 마이크로 서비스의 routes 를 추가하고 gateway 서버의 포트를 8080 으로 설정함
    
       - application.yaml 예시
