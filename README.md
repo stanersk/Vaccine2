@@ -107,24 +107,6 @@ public class MyPageViewHandler {
             e.printStackTrace();
         }
     }
-    @StreamListener(KafkaProcessor.INPUT)
-    public void whenReservationCancelled_then_UPDATE_3(@Payload ReservationCancelled reservationCancelled) {
-        try {
-            if (!reservationCancelled.validate()) return;
-                // view 객체 조회
-
-                    List<MyPage> myPageList = myPageRepository.findByUserId(reservationCancelled.getUserId());
-                    for(MyPage myPage : myPageList){
-                    // view 객체에 이벤트의 eventDirectValue 를 set 함
-                    myPage.setReservationStatus(reservationCancelled.getReservationStatus());
-                // view 레파지 토리에 save
-                myPageRepository.save(myPage);
-                }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 ```
 - 실제로 view 페이지를 조회해 보면 모든 예약에 대한 전반적인 상태를 알수 있다.
 ![image](https://user-images.githubusercontent.com/86760552/132297054-c92b5e43-a23b-4651-8491-dc2a55195106.png)
