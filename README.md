@@ -53,15 +53,10 @@
 ### 2. CQRS 
 
 - Table 구조
+![image](https://user-images.githubusercontent.com/86760552/132290110-0e3753eb-06c0-4382-8eaa-ae94827f72c0.png)
 
 
 
-![image](https://user-images.githubusercontent.com/86760552/130930333-b0202777-9080-4cad-a52b-dc4a822d7aa5.png)
-
-    (1) 백신수량 감소가 되지 않은 건은 예약이 되지 않아야 한다.(Sync 호출)
-    (2) 예약 시스템 과중되면 잠시 후에 하도록 유도한다.(Circuit breaker)
-    (3) 예약정보를 한번에 확인할 수 있어야 한다.(CQRS)
-    (4) 백신 관리시스템이 문제가 있더라도 예약 취소는 받을 수 있어야 한다.(Async event-driven)
 
 ## 헥사고날 아키텍처 다이어그램 도출
     
