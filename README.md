@@ -328,7 +328,9 @@ hystrix:
         }
     }
 ```
-## 처리 예제 투입
+- 처리 결과
+
+![image](https://user-images.githubusercontent.com/86760552/132433517-c97affa6-d119-40f0-ba40-c608fddac0d2.png)
 
 # 8. Autoscale (HPA)
 
